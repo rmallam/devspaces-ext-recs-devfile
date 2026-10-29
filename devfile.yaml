@@ -1,0 +1,36 @@
+schemaVersion: 2.2.2
+metadata:
+  name: ext-recs-devfile
+  displayName: Extension recs via devfile
+  description: Test Dev Spaces recommendations from metadata.attributes (no .vscode/extensions.json file)
+  tags:
+    - demo
+    - extensions
+    - DevSpaces
+  attributes:
+    metadata.openshift.io/scopes: ['devspaces']
+    .vscode/extensions.json: |
+      {
+        "recommendations": [
+          "dbaeumer.vscode-eslint",
+          "esbenp.prettier-vscode",
+          "redhat.vscode-yaml"
+        ]
+      }
+
+components:
+  - name: tools
+    container:
+      image: registry.redhat.io/devspaces/udi-rhel9:3.30
+      memoryLimit: 2Gi
+      memoryRequest: 512Mi
+      cpuLimit: "1"
+      cpuRequest: 100m
+      mountSources: true
+      sourceMapping: /projects
+
+commands:
+  - id: hello
+    exec:
+      component: tools
+      commandLine: echo "devfile-attribute recommendations demo" && ls -la
